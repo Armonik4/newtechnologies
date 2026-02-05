@@ -27,7 +27,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - run: flutter config --enable-windows-desktop
-      - run: flutter create .
-      - run: flutter pub get
-      - run: flutter build windows --release
+      - name: Enable Windows support and create project files
+        run: |
+          flutter config --enable-windows-desktop
+          flutter create .
+      - name: Build Windows
+        run: flutter build windows --release
