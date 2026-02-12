@@ -1,44 +1,50 @@
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:myapp/screens/home_screen.dart';
+import 'package:myapp/screens/scanner_screen.dart';
+import 'package:myapp/screens/garden_screen.dart';
 
-void main() => runApp(MaterialApp(home: EcoLog()));
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return const HomeScreen();
+      },
+      routes: <RouteBase>[
+        GoRoute(
+          path: 'scanner',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ScannerScreen();
+          },
+        ),
+        GoRoute(
+          path: 'garden',
+          builder: (BuildContext context, GoRouterState state) {
+            return const GardenScreen();
+          },
+        ),
+      ],
+    ),
+  ],
+);
 
-class EcoLog extends StatefulWidget {
-  @override
-  _EcoLogState createState() => _EcoLogState();
+void main() {
+  runApp(const MyApp());
 }
 
-class _EcoLogState extends State<EcoLog> {
-  final List<String> _data = [];
-  final TextEditingController _input = TextEditingController();
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("DevOps PoC: Android & Windows")),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: TextField(
-              controller: _input,
-              decoration: InputDecoration(labelText: "Nombre del Punto"),
-            ),
-          ),
-          ElevatedButton(
-            child: Text("Registrar"),
-            onPressed: () => setState(() {
-              _data.add(_input.text);
-              _input.clear();
-            }),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _data.length,
-              itemBuilder: (c, i) =>
-                  ListTile(title: Text(_data[i])),
-            ),
-          ),
-        ],
+    return MaterialApp.router(
+      routerConfig: _router,
+      title: 'EcoTracker App',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
     );
   }
